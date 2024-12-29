@@ -15,7 +15,7 @@ public class KafkaMessageListener {
     @Autowired
     private LinkFinderWorker worker;
 
-    @KafkaListener(topics = {"domains", "subdomains", "js"}, groupId = "link-finder-group")
+    @KafkaListener(topics = {"${kafka.topics.domain}", "${kafka.topics.subdomain}"}, groupId = "${kafka.groups.linkfinder}")
     public void listen(String message) {
         executorService.submit(() -> worker.processMessage(message));
     }

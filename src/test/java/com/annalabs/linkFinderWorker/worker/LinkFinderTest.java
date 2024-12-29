@@ -41,7 +41,7 @@ class LinkFinderTest {
 
     }
 
-    @KafkaListener(topics = "api", groupId = "linkFinderWorker-group")
+    @KafkaListener(topics = {"${kafka.topics.api}"}, groupId = "${kafka.groups.db}")
     public void listen(String message) {
         this.receivedMessage = message;
         latch.countDown();

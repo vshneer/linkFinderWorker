@@ -1,6 +1,7 @@
 package com.annalabs.linkFinderWorker.worker;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class LinkFinderWorker {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Value("${kafka.topics.api}")
+    private String topic;
 
     public void processMessage(String message) {
         String fileNameInput = message + "_in.txt";
@@ -49,7 +52,7 @@ public class LinkFinderWorker {
             executor.submit(() -> {
                 try (BufferedReader reader = new BufferedReader(new BufferedReader(new FileReader(pathOutputFile)))) {
                     reader.lines().forEach(line -> {
-                        kafkaTemplate.send("api", line);
+                        kafkaTemplate.send(topic, line);
                     }); // Process output
                 } catch (IOException e) {
                     System.err.println("Error reading from output file: " + e.getMessage());

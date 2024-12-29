@@ -23,12 +23,14 @@ public class KafkaConsumerConfig {
         this.bootstrapServers = bootstrapServers;
     }
 
+    @Value("${kafka.groups.linkfinder}")
+    private String group;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, "linkFinder-group");
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, group);
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(configProps);
